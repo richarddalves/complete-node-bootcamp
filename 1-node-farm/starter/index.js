@@ -1,5 +1,6 @@
 const fs = require("fs");
 const http = require("http");
+const url = require("url");
 
 /////////////////////////////////////////
 // FILES
@@ -30,8 +31,20 @@ const http = require("http");
 /////////////////////////////////////////
 // SERVER
 const server = http.createServer((req, res) => {
-  console.log(req);
-  res.end("Hello from the server!");
+  //if (req.url !== "/favicon.ico")
+  const pathName = req.url;
+
+  if (pathName === "/" || pathName === "/overview") {
+    res.end("Hello from the server!");
+  } else if (pathName === "/product") {
+    res.end("This is product");
+  } else {
+    res.writeHead(404, {
+      "Content-type": "text/html",
+      "my-own-header": "hello-world"
+    });
+    res.end("<h1>Page could not be found</h1>");
+  }
 });
 
 const PORT = 8000;
@@ -39,6 +52,3 @@ const PORT = 8000;
 server.listen(PORT, "127.0.0.1", () => {
   console.log(`Listening to requests on port ${PORT}`);
 });
-
-
-
